@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIプロトコル展望 & リサーチマトリックス 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 350px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(148, 163, 184, 0.1); }
+        .neon-text { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+    <!-- 
+    概要:
+    1. 日本語版 (Japanese Version) of the AI Protocol Landscape.
+    2. Data updated with Japanese translations for all fields.
+    3. Chart labels adapted for Japanese text wrapping.
+    4. NO SVG, NO Mermaid JS used.
+    -->
+</head>
+<body class="antialiased selection:bg-blue-500 selection:text-white">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Header -->
+        <header class="mb-12 text-center">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 mb-4 neon-text">
+                AIプロトコル・ランドスケープ
+            </h1>
+            <p class="text-lg text-slate-400 max-w-3xl mx-auto">
+                包括的リサーチマトリックス & 標準化ロードマップ (2024-2025)
+            </p>
+            <div class="mt-6 inline-flex items-center space-x-2 bg-blue-900/30 px-4 py-2 rounded-full border border-blue-500/30">
+                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                <span class="text-blue-200 text-sm font-semibold">焦点: エージェント相互運用性 & 決済 (Payments)</span>
+            </div>
+        </header>
+
+        <!-- Intro Section -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="glass-panel p-6 rounded-2xl border-l-4 border-blue-500">
+                <h3 class="text-slate-400 uppercase text-xs font-bold tracking-wider mb-2">追跡プロトコル総数</h3>
+                <div class="text-4xl font-bold text-white">12+</div>
+                <p class="text-sm text-slate-400 mt-2">決済・ID・コンテキスト分野を網羅</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border-l-4 border-purple-500">
+                <h3 class="text-slate-400 uppercase text-xs font-bold tracking-wider mb-2">活動のピーク</h3>
+                <div class="text-4xl font-bold text-white">2025年 Q3</div>
+                <p class="text-sm text-slate-400 mt-2">金融とAIの融合が加速する予測時期</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border-l-4 border-emerald-500">
+                <h3 class="text-slate-400 uppercase text-xs font-bold tracking-wider mb-2">主要リサーチターゲット</h3>
+                <div class="text-xl font-bold text-white truncate">相互運用性 (Interoperability)</div>
+                <p class="text-sm text-slate-400 mt-2">MCPからAgent-to-Agent通信へ</p>
+            </div>
+        </section>
+
+        <!-- Visual Analysis Section -->
+        <section class="mb-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Chart 1: Release Timeline -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-white">プロトコル公開タイムライン</h2>
+                        <p class="text-sm text-slate-400 mt-2">
+                            プロトコルの発表および標準化の密度を可視化しています。
+                            2025年後半にかけて、単なるコンテキスト交換（2024年）から、
+                            複雑な金融取引を伴う「エージェントコマース」へとトレンドが大きく移行しています。
+                        </p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="velocityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Domain Distribution -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-white">ドメイン構成比率</h2>
+                        <p class="text-sm text-slate-400 mt-2">
+                            エコシステムのカテゴリ別内訳です。初期は「インフラ」（推論など）が中心でしたが、
+                            現在は「コマース & 決済」がリサーチの主流となり、
+                            経済的に自律したエージェントへの業界の期待を示しています。
+                        </p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="domainChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Stack Visualization (CSS Based) -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-indigo-500">エージェント・スタック・アーキテクチャ</h2>
+            <p class="text-slate-400 mb-8 max-w-4xl">
+                エコシステムは階層構造を形成しつつあります。各プロトコルは競合するだけでなく、
+                エージェント階層の特定のレイヤーに定着しつつあります。以下の図はこの新たな標準構造を示しています。
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                <!-- Layer 4 -->
+                <div class="md:col-span-4 bg-gradient-to-r from-emerald-900 to-emerald-800 p-4 rounded-xl border border-emerald-700/50 shadow-lg">
+                    <h3 class="text-emerald-300 font-bold mb-2">アプリケーション & コマース層</h3>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-emerald-100 border border-emerald-500/30">Agentic Commerce (ACP)</span>
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-emerald-100 border border-emerald-500/30">Agent Pay Acceptance</span>
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-emerald-100 border border-emerald-500/30">Routstr (ルーティング)</span>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="md:col-span-4 flex justify-center -my-2 z-10">
+                    <div class="text-slate-600 text-2xl">⬇</div>
+                </div>
+
+                <!-- Layer 3 -->
+                <div class="md:col-span-4 bg-gradient-to-r from-purple-900 to-purple-800 p-4 rounded-xl border border-purple-700/50 shadow-lg">
+                    <h3 class="text-purple-300 font-bold mb-2">調整 (Coordination) & ID層</h3>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-purple-100 border border-purple-500/30">Trusted Agent (TAP)</span>
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-purple-100 border border-purple-500/30">Second Me (SMP)</span>
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-purple-100 border border-purple-500/30">Agent-to-Agent (A2A)</span>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="md:col-span-4 flex justify-center -my-2 z-10">
+                    <div class="text-slate-600 text-2xl">⬇</div>
+                </div>
+
+                <!-- Layer 2 -->
+                <div class="md:col-span-2 bg-gradient-to-r from-blue-900 to-blue-800 p-4 rounded-xl border border-blue-700/50 shadow-lg">
+                    <h3 class="text-blue-300 font-bold mb-2">コンテキスト & 転送層</h3>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-blue-100 border border-blue-500/30">Model Context (MCP)</span>
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-blue-100 border border-blue-500/30">W3C AI Agent</span>
+                    </div>
+                </div>
+
+                <!-- Layer 1 -->
+                <div class="md:col-span-2 bg-gradient-to-r from-slate-800 to-slate-700 p-4 rounded-xl border border-slate-600/50 shadow-lg">
+                    <h3 class="text-slate-300 font-bold mb-2">インフラ & データ層</h3>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-slate-100 border border-slate-500/30">Open Inference V2</span>
+                        <span class="px-3 py-1 bg-black/40 rounded text-xs text-slate-100 border border-slate-500/30">C2PA (来歴証明)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comprehensive Table Section -->
+        <section>
+            <div class="flex flex-col md:flex-row justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white pl-2 border-l-4 border-pink-500">マスター・リサーチ・マトリックス</h2>
+                    <p class="text-sm text-slate-400 mt-1">リリース日順（最新優先）。リサーチ用アクションアイテムを含む。</p>
+                </div>
+                <button onclick="window.print()" class="mt-4 md:mt-0 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm text-white transition-colors">
+                    PDFへエクスポート
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse min-w-[800px]">
+                        <thead>
+                            <tr class="bg-slate-800/80 text-slate-300 text-sm uppercase tracking-wider">
+                                <th class="p-4 font-semibold border-b border-slate-700">プロトコル名</th>
+                                <th class="p-4 font-semibold border-b border-slate-700 w-24">発表年月</th>
+                                <th class="p-4 font-semibold border-b border-slate-700">カテゴリ</th>
+                                <th class="p-4 font-semibold border-b border-slate-700">主要組織</th>
+                                <th class="p-4 font-semibold border-b border-slate-700">概要</th>
+                                <th class="p-4 font-semibold border-b border-slate-700 text-center">ステータス</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm text-slate-300 divide-y divide-slate-700/50" id="protocolTableBody">
+                            <!-- Table rows generated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="mt-4 text-xs text-slate-500 italic text-center">
+                * 注記: 2025年後半の日付はロードマップに基づく予測です。「Routstr」等はリクエストに基づき追加されました。
+            </p>
+        </section>
+
+    </div>
+
+    <script>
+        // Data Source (Translated)
+        const protocolData = [
+            {
+                name: "Trusted Agent Protocol (TAP)",
+                entity: "Visa, Cloudflare",
+                date: "2025-10",
+                category: "ID & セキュリティ",
+                summary: "高額取引においてAIエージェントを正規ユーザーとして暗号学的に検証。",
+                link: "https://visa.com",
+                status: "Pilot"
+            },
+            {
+                name: "Agent Pay Acceptance",
+                entity: "Mastercard",
+                date: "2025-10",
+                category: "決済 (Payments)",
+                summary: "AIトークンによって開始された支払いを加盟店が検証・受諾するためのフレームワーク。",
+                link: "https://mastercard.com",
+                status: "Announced"
+            },
+            {
+                name: "AI Agent Protocol (Draft)",
+                entity: "W3C Community Group",
+                date: "2025-10",
+                category: "標準化",
+                summary: "Webネイティブなエージェントの発見と識別方法の標準化。",
+                link: "https://w3.org",
+                status: "Draft"
+            },
+            {
+                name: "Agentic Commerce Protocol (ACP)",
+                entity: "Stripe, OpenAI",
+                date: "2025-09",
+                category: "コマース",
+                summary: "自律的な製品選択、チェックアウト、物流交渉のためのオープン仕様。",
+                link: "https://stripe.com",
+                status: "Beta"
+            },
+            {
+                name: "Agent Payments Protocol (AP2)",
+                entity: "Google Cloud, 60+ Partners",
+                date: "2025-09",
+                category: "決済 (Payments)",
+                summary: "銀行および暗号資産レールを横断するエージェント用共通トランザクション言語。",
+                link: "https://cloud.google.com",
+                status: "Consortium"
+            },
+            {
+                name: "C2PA 2.2",
+                entity: "Coalition (Adobe/BBC)",
+                date: "2025-05",
+                category: "来歴証明 (Provenance)",
+                summary: "コンテンツの起源を検証し、ディープフェイクや誤情報を防止するデジタル署名標準。",
+                link: "https://c2pa.org",
+                status: "Standard"
+            },
+            {
+                name: "Agent-to-Agent Protocol (A2A)",
+                entity: "Google, Linux Foundation",
+                date: "2025-04",
+                category: "調整 (Coordination)",
+                summary: "エージェント間での交渉やタスクのハンドオフ（引き継ぎ）方法を標準化。",
+                link: "https://linuxfoundation.org",
+                status: "OSS"
+            },
+            {
+                name: "Second Me Protocol (SMP)",
+                entity: "Mindverse",
+                date: "2025-03",
+                category: "ID (P2P)",
+                summary: "個人のAIデジタルツインのための分散型IDレイヤー。",
+                link: "https://arxiv.org",
+                status: "Research"
+            },
+            {
+                name: "Routstr Protocol",
+                entity: "Open Routing Alliance",
+                date: "2025-02",
+                category: "インフラ",
+                summary: "異なるプロバイダー間でLLMクエリを最適化するための動的ルーティングレイヤー。",
+                link: "#",
+                status: "Emerging"
+            },
+            {
+                name: "OpenTelemetry GenAI",
+                entity: "CNCF",
+                date: "2024-12",
+                category: "可観測性 (Observability)",
+                summary: "AIワークフローにおけるトークン使用量やレイテンシを追跡するための標準属性。",
+                link: "https://opentelemetry.io",
+                status: "Stable"
+            },
+            {
+                name: "Model Context Protocol (MCP)",
+                entity: "Anthropic",
+                date: "2024-11",
+                category: "コンテキスト & I/O",
+                summary: "LLMをローカルデータや外部ツールに接続する普遍的標準 (AIの「USB-C」)。",
+                link: "https://anthropic.com",
+                status: "Live"
+            },
+            {
+                name: "Open Inference Protocol V2",
+                entity: "KServe (CNCF)",
+                date: "2024-03",
+                category: "インフラ",
+                summary: "モデルサービングエンジンと通信するための標準データプレーン (REST/gRPC)。",
+                link: "https://kserve.io",
+                status: "Stable"
+            }
+        ];
+
+        // Label Wrapping Utility (Japanese Friendly)
+        // Splits by space if available, otherwise splits by length (chunking)
+        function splitLabel(str) {
+            const maxLen = 12; // Slightly shorter for Japanese
+            
+            // If strictly short enough, return as is
+            if (str.length <= maxLen) return str;
+
+            // Try splitting by space first (for English mixed terms)
+            if (str.includes(' ')) {
+                const words = str.split(' ');
+                const lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    if (currentLine.length + 1 + words[i].length <= maxLen) {
+                        currentLine += ' ' + words[i];
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    }
+                }
+                lines.push(currentLine);
+                // If the result still has very long lines (unbroken Japanese), force split
+                return lines.flatMap(line => line.length > maxLen ? chunkString(line, maxLen) : line);
+            } 
+            
+            // No spaces, just chunk it
+            return chunkString(str, maxLen);
+        }
+
+        function chunkString(str, length) {
+            return str.match(new RegExp('.{1,' + length + '}', 'g'));
+        }
+
+        // Common Chart Options
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: '#94a3b8', font: { family: "'Noto Sans JP', sans-serif" } }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleColor: '#fff',
+                    bodyColor: '#cbd5e1',
+                    borderColor: 'rgba(59, 130, 246, 0.5)',
+                    borderWidth: 1,
+                    padding: 10,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(''); // Japanese doesn't usually need space joining, but context dependent
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // --- Chart 1: Velocity (Bar) ---
+        // Aggregate data by Quarter
+        const quarters = { '2024 Q1': 1, '2024 Q2': 0, '2024 Q3': 0, '2024 Q4': 2, '2025 Q1': 2, '2025 Q2': 2, '2025 Q3': 2, '2025 Q4': 3 };
+        const velocityCtx = document.getElementById('velocityChart').getContext('2d');
+        new Chart(velocityCtx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(quarters),
+                datasets: [{
+                    label: 'プロトコルリリース数',
+                    data: Object.values(quarters),
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 4,
+                    hoverBackgroundColor: '#60a5fa'
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                        ticks: { color: '#94a3b8', stepSize: 1 }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+
+        // --- Chart 2: Domain Distribution (Doughnut) ---
+        const domains = {};
+        protocolData.forEach(p => {
+            domains[p.category] = (domains[p.category] || 0) + 1;
+        });
+        
+        // Process Labels for Wrapping
+        const rawDomainLabels = Object.keys(domains);
+        const wrappedDomainLabels = rawDomainLabels.map(l => splitLabel(l));
+
+        const domainCtx = document.getElementById('domainChart').getContext('2d');
+        new Chart(domainCtx, {
+            type: 'doughnut',
+            data: {
+                labels: wrappedDomainLabels,
+                datasets: [{
+                    data: Object.values(domains),
+                    backgroundColor: [
+                        '#3b82f6', // Blue
+                        '#a855f7', // Purple
+                        '#10b981', // Emerald
+                        '#f43f5e', // Pink
+                        '#f59e0b', // Amber
+                        '#6366f1'  // Indigo
+                    ],
+                    borderColor: '#0f172a',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...commonOptions,
+                cutout: '60%'
+            }
+        });
+
+        // --- Table Generation ---
+        const tableBody = document.getElementById('protocolTableBody');
+        
+        // Sort Date Descending
+        const sortedData = protocolData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        sortedData.forEach(p => {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-slate-800/50 transition-colors border-b border-slate-700/50';
+            
+            // Status Styling
+            let statusColor = 'bg-slate-600';
+            let displayStatus = p.status;
+            
+            // Translate common status if needed, or keep technical terms
+            if(p.status === 'Live' || p.status === 'Stable') statusColor = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50';
+            else if (p.status === 'Beta' || p.status === 'Pilot' || p.status === 'Draft') statusColor = 'bg-blue-500/20 text-blue-400 border-blue-500/50';
+            else statusColor = 'bg-purple-500/20 text-purple-400 border-purple-500/50';
+
+            row.innerHTML = `
+                <td class="p-4 font-medium text-white">${p.name}</td>
+                <td class="p-4 whitespace-nowrap text-slate-400 font-mono">${p.date}</td>
+                <td class="p-4">
+                    <span class="inline-block px-2 py-1 text-xs rounded border border-slate-600 bg-slate-800 text-slate-300">
+                        ${p.category}
+                    </span>
+                </td>
+                <td class="p-4 text-slate-400">${p.entity}</td>
+                <td class="p-4 text-slate-400 text-xs leading-relaxed max-w-xs">${p.summary}</td>
+                <td class="p-4 text-center">
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="px-2 py-1 rounded text-xs font-bold border ${statusColor}">
+                            ${displayStatus}
+                        </span>
+                        <a href="${p.link}" target="_blank" class="text-xs text-blue-400 hover:text-blue-300 hover:underline">
+                            調査する &rarr;
+                        </a>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+    </script>
+</body>
+</html>
